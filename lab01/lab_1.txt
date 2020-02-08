@@ -1,0 +1,37 @@
+b.i. The GPS problem solver is implemented as a function
+b.ii. These objects are Lists
+b.iii. Yes it is recursive. It implements recursion through the achieve_all() function which solves subproblems.
+
+c.i. The code models the monkey/banana problem which states that a monkey is in a room with bananas hanging from the
+    ceiling. The monkey can reach the banana if it stands on a chair and hits the bananas down with a stick. The code
+    is mostly faithful, but has a ball instead of a stick.
+c.ii. The domain actions specify the action, the preconditions for the action, the states that are possible after the
+    action is completed, and the states that are not possible after the state is completed.
+c.iii. The gps solves the problem by working backwards. It starts with the goal state and works backward until it
+    reaches the start state. Then it retraces its steps to the goal state using the actions. Here's the stacktrace:
+DEBUG:root:  Achieving: not hungry
+DEBUG:root:  Consider: eat bananas
+DEBUG:root:    Achieving: has bananas
+DEBUG:root:    Consider: grasp bananas
+DEBUG:root:      Achieving: at bananas
+DEBUG:root:      Consider: climb on chair
+DEBUG:root:        Achieving: chair at middle room
+DEBUG:root:        Consider: push chair from door to middle room
+DEBUG:root:          Achieving: chair at door
+DEBUG:root:          Achieving: at door
+DEBUG:root:        Action: push chair from door to middle room
+DEBUG:root:        Achieving: at middle room
+DEBUG:root:        Achieving: on floor
+DEBUG:root:      Action: climb on chair
+DEBUG:root:      Achieving: empty handed
+DEBUG:root:      Consider: drop ball
+DEBUG:root:        Achieving: has ball
+DEBUG:root:      Action: drop ball
+DEBUG:root:    Action: grasp bananas
+DEBUG:root:  Action: eat bananas
+
+c.iv. The gps system at least achieves some level of artificial intelligence since it is able to solve a logical
+    problem. It fits the definition of thinking humanly, but since it can't solve all problems it may not even
+    successfully meet that definition
+c.v. A monkey that solved this problem would be showing intelligence because by solving the problem it would show that
+    it can think rationally

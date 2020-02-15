@@ -1,0 +1,36 @@
+Exercise 2.1
+a. Both Hill-climbing and Simulated annealing solve the problem and both perform well
+b. Hill-climbing works more quickly
+c. The starting value for x does not make a difference because the global maximum is also the only local maxima.
+d. The delta-step value does not have much of an effect on hill-climbing because that algorithm will always go toward
+    the maximum regardless of the step. However, as the delta-step decreases, simulated annealing gets less and less
+    accurate since it is almost impossible with a small delta step to make progress toward the solution when the value
+    is changed by such as small amount with each step.
+e. The exp_schedule() function defines how the temperature will operate with regard to time in simulated annealing.
+
+Exercise 2.2
+a. Simulated annealing tends to perform better than Hill-climbing in this problem space because there are a lot of local
+    maxima limiting the ability of hill-climbing to find a good value
+b. The starting value does make a difference because there are many different local maxima
+c. Modifying the step size does make a difference because for large delta values, the algorithms can transition to
+    a different "hill" than where it started, which especially helps simulated annealing.
+d. The maximum value is infinite and the minimum value is 0. Neither of them do particularly well considering the
+    maximum, but simulated annealing tends to do much better than hill-climbing
+
+Exercise 2.3
+a. Hill-climbing is able to do better with the restarts because it is no longer completely dependent on 1 initial
+    randomly chose value. It is able to search across more initial values. Simulated annealing performs about the
+    same with random restarts since it has some randomness already included in the algorithm
+b. Hill-climbing averaged 14.0 while Simulated annealing averaged 20.9
+c. Simulated annealing did better on average because it can randomly stray farther from the initial value, toward a
+    better maximum
+
+Exercise 2.4
+a. Hill-climbing would be the better algorithm to use with local beam search because the k-best states are chosen
+    after every step, meaning that moving down sometimes (as simulated annealing does) would not help because it
+    simply would not be chosen as one of the best states
+b. It's hard to say how many solutions could be maintained without testing with code, but I suspect that 100 states
+    would be completely manageable.
+c. You would need the code to run in parallel to implement beam search. It's different from random restarts because the
+    k states are found in parallel, not sequentially, and the information found at all the states is used to find the
+    best solution collectively, rather than having all trials run independently.

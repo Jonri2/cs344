@@ -1,0 +1,42 @@
+Exercise 3.1
+    a. Depth-first search only works in a timely manner for the solved puzzle since simply searching for the deepest
+    node in sudoku would not get close to a goal state and it cannot backtrack. AC3 works for both the solved and the
+    easy puzzles, but completely fails for both of the harder problems since there's no backtracking implemented in the
+    AC3 algorithms. It can find the solution to the easy puzzle since there is no point where the algorithm has to guess
+    to find the goal. Backtracking works for both the solved and the easy problem since they do not have a lot of
+    possible paths, but it cannot solve the two harder puzzles in a timely manner (without the added parameters) since
+    there are too many possible paths. Min-conflicts works only for the solved puzzle since it will reach a point with
+    few conflicts, but with no ways to get fewer conflicts since there is no backtracking or randomness implemented.
+
+    b. Minimum-remaining values should work significantly better than first-unassigned variable in sudoku since it will
+    cause the algorithm to select a space with the fewest number of possibilities, meaning it is more likely to be the
+    correct answer. Forward-checking should work significantly better than no inference for sudoku since it would remove
+    the value just selected from the domains of the spaces in its row, column, and box leading to less incorrect paths.
+    Combining minimum-remaining values and forward-checking works the best as this combination allows the backtracking
+    search to solve both the hard and hardest puzzles.
+
+Exercise 3.2
+    a. AC3 does not work for n-Queens because the domain of each space would not only have one value since there is more
+    than 1 possible solution to the problem. Backtracking with default parameters can solve up to about the 30-queens
+    problem in a timely manner. Min-conflicts can solve up to the 5000-queens problem. Min-conflicts is able to solve
+    much bigger problems for n-queens than backtracking because it is a local search algorithm and backtracking is
+    traditional search, and there are a lot of possible solutions in the search space.
+
+    b. The combination of minimum-remaining values and forward-checking works the best. Forward-checking is especially
+    helpful because it eliminates the branches of the search space where queens are conflicting.
+
+    c. The number of steps varies, but regardless of the problem-size it tends to be less than 100 steps (usually
+    between 25 and 75). This is because there are a lot of possible solutions, so it doesn't take a lot of moves
+    to find one.
+
+Exercise 3.3
+    a. CSP requires variables, domains, neighbors, and constraints while traditional problems require an initial state,
+    actions, results (of performing an action on a state), and a goal test. A CSP uses variables instead of states and
+    is solved when a value from each variable's domain is assigned to the variable in such a way that the constraints
+    are not violated. A traditional problem will start with an initial state, and actions will be performed producing
+    results until a goal test on one of the results returns true.
+
+    b. In traditional problem solving, heuristics are generally based on a value assigned to each state, such that
+    increasing the value will get closer to the goal state. In constraint-based problem solving, heuristics are
+    generally based on the domains and constraints. It is better to have less possible values in the domain and it is
+    better to have less violated constraints.

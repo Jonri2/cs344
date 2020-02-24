@@ -23,9 +23,9 @@ Exercise 3.2
     traditional search, and there are a lot of possible solutions in the search space.
 
     b. The combination of minimum-remaining values and forward-checking works the best. Minimum-remaining values is
-    especially helpful because it fills the spaces that queens must be placed in first rather than choosing a space
-    randomly. Forward-checking is also helpful because it eliminates the branches of the search space where queens are
-    conflicting.
+    especially helpful because it helps the search find a conflicting space is an error has been made earlier in the
+    search, leading to backtracking rather than searching farther down a bad branch. Forward-checking is also helpful
+    because it eliminates the branches of the search space where queens are conflicting.
 
     c. The number of steps varies, but regardless of the problem-size it tends to be less than 100 steps (usually
     between 25 and 75). This is because there are a lot of possible solutions, so it doesn't take a lot of moves

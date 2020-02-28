@@ -1,0 +1,24 @@
+Exercise 4.3
+a.  i.   *bold*P(User) = <0.089, 0.911>
+    ii.  P(test | user) = 0.99
+    iii. P(~test | user) = 1 - 0.99 = 0.01
+    iv.  P(test | ~user) = 1- 0.98 = 0.02
+    v.   *bold*P(User | test)
+            = <P(user | test), P(~user | test)>
+            = a <P(test | user) * P(user), P(test | ~user) * P(user)>
+            = a <0.99 * 0.089, 0.02 * 0.089>
+            = a <0.08811, 0.00178>
+            = 1/(0.08811 + 0.00178) * <0.08811, 0.00178>
+            = <0.98, 0.02>
+
+b.  P(cancer) = 0.01
+    P(test | cancer) = 0.8
+    P(test | ~cancer) = 0.096
+
+    *bold*P(cancer | test)
+        = <P(cancer | test), P(~cancer | test)
+        = a <P(test | cancer) * P(cancer), P(test | ~cancer) * P(cancer)>
+        = a <0.8 * 0.01, 0.096 * 0.01>
+        = a <0.08, 0.0096>
+        = 1/(0.08 + 0.0096) * <0.08, 0.0096>
+        = <0.89, 0.11>

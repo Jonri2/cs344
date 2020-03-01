@@ -63,7 +63,7 @@ problem = {
 if __name__ == '__main__':
 
     # This turns on detailed logging for the GPS "thought" process.
-    # logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
 
     # Use GPS to solve the problem formulated above.
     actionSequence = gps(

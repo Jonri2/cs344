@@ -1,0 +1,18 @@
+1. The ML model will predict running times based on previous data.
+2. The ideal outcome is to accurately predict race times to give runners and coaches an accurate estimate of what time
+   will be run in a race.
+3. a. The ML system will succeed if it predicts race times within 1% of the true value >75% of the time.
+   b. The key results for the success metrics are the deviation of the predicted time from the actual time.
+   c. The ML system will fail it it predicts race times within 1% of the true value <75% of the time.
+4. a. The output from the ML model will be the predicted times.
+   b. The output is regression.
+5. a. The output will be quickly displayed to the user.
+   b. The output will be used to give the user information and further improve the system if the user gives a response
+      if the prediction was successful.
+6. Estimate the time using past times and the variance of previous times.
+7. The problem is best formed as unidimensional regression which predicts the next race time based on a previous race
+   time, number of miles run, and amount of rest before the race
+8. Input 1: Previous race time, Input 2: Number of miles run, Input 3: Amount of rest, Output: Predicted race time
+9. Previous race times would be extremely easy to access from online databases, but the miles run and amount of rest
+   would have to be logged by the runner, which could be much more difficult to obtain.
+10. Previous race time would be very easy to obtain and give a relatively good estimate for initial outcome.

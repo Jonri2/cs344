@@ -1,0 +1,8 @@
+Gain(Hungry?) = Entropy(Restaurant) - Remainder(Hungry?)
+              = 1.0 - (7/12 * Entropy(Yes) + 5/12 * Entropy(No))
+              = 1.0 - (7/12 * (5/7 * -lg(5/7) + 2/7 * -lg(2/7)) + 5/12 * (1/5 * -lg(1/5) + 4/5 * -lg(4/5)))
+              = 1.0 - 0.804
+              = 0.196
+
+This question is better than Types? but worse than Patrons? because Types? gives 0.0 bits of information while
+Patrons? gives 0.46 bits of information and 0.0 < 0.196 < 0.46.

@@ -1,0 +1,6 @@
+a. The K-fold validation allows for validation on small datasets by using K-1 partitions for validation and the last
+    partition for evaluation.
+b. Using a dataset with wildly different ranges would make it very difficult to find patterns, sepecially with a linear model.
+c. Yes, I agree because using a large network would cause severe overfitting.
+d. The alternatives did not do better because using less hidden layers or a narrower layer did not give an accurate model
+    and using more hidden layers or a wider layer caused overfitting.

@@ -1,0 +1,26 @@
+a. The Pearson correlation coefficient is a measure of the linear correlation between two variables. latitude and
+housing_median_age have a Pearson correlation coefficient of 0.0 which makes sense because the location of a block has
+nothing to do with the age of the people living there.
+
+b. 1. Latitude and median_income. The final RMSE was 113
+   2. I developed the distance from san francisco synthetic feature
+def select_and_transform_features(source_df):
+  selected_examples = pd.DataFrame()
+  selected_examples["median_income"] = source_df["median_income"]
+  selected_examples["distance_from_san_francisco"] = source_df["latitude"].apply(
+      lambda l: abs(l - 38.0))
+  return selected_examples
+
+selected_training_examples = select_and_transform_features(training_examples)
+selected_validation_examples = select_and_transform_features(validation_examples)
+
+_ = train_model(
+    learning_rate=0.01,
+    steps=500,
+    batch_size=5,
+    training_examples=selected_training_examples,
+    training_targets=training_targets,
+    validation_examples=selected_validation_examples,
+    validation_targets=validation_targets)
+
+The final RMSE was 131

@@ -1,0 +1,32 @@
+1. a. median_income is on a scale from about 3 to 15. It's not at all clear what this scale refers to—looks like maybe some log scale? It's not documented anywhere; all we can assume is that higher values correspond to higher income.
+   b. The maximum median_house_value is 500,001. This looks like an artificial cap of some kind.
+   c. Our rooms_per_person feature is generally on a sane scale, with a 75th percentile value of about 2. But there are some very large values, like 18 or 55, which may show some amount of corruption in the data.
+
+2. There was likely some kind of fault in the way the training and validation data were split
+
+3. We weren't randomizing before processing the data
+
+4. training_predictions = linear_regressor.predict(input_fn=predict_training_input_fn)
+    training_predictions = np.array([item['predictions'][0] for item in training_predictions])
+
+5. test_examples = preprocess_features(california_housing_test_data)
+test_targets = preprocess_targets(california_housing_test_data)
+
+predict_test_input_fn = lambda: my_input_fn(
+      test_examples,
+      test_targets["median_house_value"],
+      num_epochs=1,
+      shuffle=False)
+
+test_predictions = linear_regressor.predict(input_fn=predict_test_input_fn)
+test_predictions = np.array([item['predictions'][0] for item in test_predictions])
+
+root_mean_squared_error = math.sqrt(
+    metrics.mean_squared_error(test_predictions, test_targets))
+
+print("Final RMSE (on test data): %0.2f" % root_mean_squared_error)
+
+b. Training data sets are used to set the weights in the machine learning algorithm so it can be used to predict real data.
+    Validation data sets are a subset of the training data set and are used to tune the hyperparameters and get initial
+    impressions about the model. Testing data sets are used for a final evaluation of the model and are used to see if
+    the model is overfitting the validation data.

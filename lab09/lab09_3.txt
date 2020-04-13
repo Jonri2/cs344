@@ -1,0 +1,4 @@
+a. Adding more layers or nodes decreased accuracy because it caused more overfitting. Decreasing to 1 hidden layer
+slightly increased the accuracy. Using mse instead of binary crossentropy slightly decreased accuracy because the binary
+crossentropy loss function is slightly better when dealing with probabilities. tanh performed about the same (but a little worse)
+than relu as an activation function because relu is simpler and easier to use.

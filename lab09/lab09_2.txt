@@ -1,0 +1,4 @@
+a. We regularize with respect to sparsity because a sparse solution will avoid overfitting, thus giving us a better model.
+b. Regularization increases sparsity by forcing the model to fit less to the data and thus remember the patterns more
+than the data itself. It does this by encouraging weights to be 0.
+c. gamma value - 0.75; LogLoss - 0.25, Model Size - 573

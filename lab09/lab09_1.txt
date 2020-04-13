@@ -5,4 +5,4 @@ as well as the Log Loss function when the output is interpreted as probability. 
 confidence much more heavily than L2 Loss.
 c. Log Loss was quite a bit more effective than L2 Loss because by penalizing low confidence more, the model was able to
 make steady progress to lower error as it progressed.
-d. AUC: 0.79, Accuracy: 0.77; Hyperparameters: learning_rate=0.000005, steps=5000, batch_size=100,
+d. AUC: 0.79, Accuracy: 0.77; Hyperparameters: learning_rate=0.000005, steps=5000, batch_size=100

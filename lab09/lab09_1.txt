@@ -1,0 +1,8 @@
+a. The final RMSE of the Linear Regressor model is 0.44 which is not very effective considering the possible values for
+each data point are 0 or 1. Also, it was not able to make much progress in decreasing the error as it trained.
+b. The L2 Loss function subtracts the predicted value from the true value and squares it. This does not preform nearly
+as well as the Log Loss function when the output is interpreted as probability. This is because Log Loss penalizes less
+confidence much more heavily than L2 Loss.
+c. Log Loss was quite a bit more effective than L2 Loss because by penalizing low confidence more, the model was able to
+make steady progress to lower error as it progressed.
+d. AUC: 0.79, Accuracy: 0.77; Hyperparameters: learning_rate=0.000005, steps=5000, batch_size=100,

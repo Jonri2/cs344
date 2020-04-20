@@ -1,0 +1,34 @@
+a. Adagrad adaptively adjusts the learning rate for each coefficient in the model
+b. Task 1:
+    my_optimizer=tf.train.GradientDescentOptimizer(learning_rate=0.005),
+    steps=2000,
+    batch_size=50,
+    hidden_units=[10, 10]
+
+    Final RMSE (on training data):   72.80
+    Final RMSE (on validation data): 71.06
+
+   Task 2:
+    my_optimizer=tf.train.AdagradOptimizer(learning_rate=0.5),
+    steps=500,
+    batch_size=100,
+    hidden_units=[10, 10]
+
+    Final RMSE (on training data):   68.73
+    Final RMSE (on validation data): 67.04
+
+    my_optimizer=tf.train.AdamOptimizer(learning_rate=0.009),
+    steps=500,
+    batch_size=100,
+    hidden_units=[10, 10]
+
+    Final RMSE (on training data): 70.11
+    Final RMSE (on validation data): 68.54
+   Task 3:
+    my_optimizer=tf.train.AdagradOptimizer(learning_rate=0.15),
+    steps=1000,
+    batch_size=50,
+    hidden_units=[10, 10]
+
+    Final RMSE (on training data):   71.56
+    Final RMSE (on validation data): 69.64

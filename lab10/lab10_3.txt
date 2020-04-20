@@ -1,0 +1,5 @@
+a. The confusion matrix shows which numbers were misclassified as other numbers
+b. Rather than using Conv2D and Max Pooling to "distill" the input like the Keras example in class, the Tensorflow
+version has 2 hidden layers that are 100 nodes wide. I was not able to make improvements to the baseline.
+c. The visualizations for 10 steps showed almost no patterns and basically looked just like noise while the
+visualizations for 1000 steps were much more concentrated and clear.

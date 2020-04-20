@@ -1,0 +1,8 @@
+a. I would much rather use Keras. Tensorflow is so ugly.
+b. Task 1:
+    learning_rate=0.001,
+    steps=1000,
+    batch_size=50,
+    hidden_units=[10, 10, 2]
+   Task 2:
+        Final RMSE = 156.24

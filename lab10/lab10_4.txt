@@ -1,0 +1,8 @@
+a. i. There are 1000 training images and 500 test images for both cats and dogs. Each image is 150x150 color pixels
+   meaning they have a shape of 150x150x3
+   ii. This ConvNet is very similar to the one we did in class. The biggest difference is that the output layer of this
+   CNN only needs to output a 0 or 1 (cat or dog) so it uses a sigmoid activation function while the CNN in class needed
+   to output 10 probabilities so it used a softmax activation function. The other big difference is that the images in
+   this dataset are 3 dimensional since they're color images so they need to be flattened an extra time.
+   iii. In the intermediate representations, you can see how the images are much clearer at the top of the network but
+   get broken down and less clear as they are "distilled".

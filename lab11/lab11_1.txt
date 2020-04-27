@@ -1,0 +1,32 @@
+a. Deep neural networks will almost always be better than a linear model unless there is a really strong linear
+relationship in the data. In that case, the linear model will be trained much more quickly.
+b. The deep neural network did a lot better than the linear model, achieving 88% accuracy as compared with 78% for the
+linear model.
+c. No embeddings do not do much good for sentiment-analysis tasks, achieving just 78% accuracy which is the same as the
+linear model and significantly worse than the deep neural network without embeddings.
+d. Entertaining and comedy ended up near each other which makes sense because comedy tends to be entertaining.
+e.
+terms_feature_column = tf.feature_column.categorical_column_with_vocabulary_file(key="terms",
+                                                                                 vocabulary_file=terms_path)
+
+terms_embedding_column = tf.feature_column.embedding_column(terms_feature_column, dimension=2)
+feature_columns = [ terms_embedding_column ]
+
+my_optimizer = tf.train.AdamOptimizer(learning_rate=0.1)
+my_optimizer = tf.contrib.estimator.clip_gradients_by_norm(my_optimizer, 5.0)
+
+classifier = tf.estimator.DNNClassifier(
+  feature_columns=feature_columns,
+  hidden_units=[10,10],
+  optimizer=my_optimizer
+)
+
+classifier.train(
+  input_fn=lambda: _input_fn([train_path]),
+  steps=1000)
+
+train accuracy: 95.3%
+test accuracy: 88.1%
+
+All I changed was the optimizer to adam and the feature column to the whole vocabulary file. It overfits pretty badly,
+but achieves pretty good accuracy on the test set anyways.

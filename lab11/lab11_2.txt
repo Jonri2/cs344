@@ -1,0 +1,20 @@
+a. The biggest bias is that way more men are represented than women. Also, the minimum for hours worked per week is 1
+which doesn't make much sense since most jobs require more than 1 hour of work per week. Additionally, the capital gains
+and losses is 90% 0's.
+b. Married females are very underrepresented in the data since males outnumber females 5:1 in the married-civ-spouse
+category.
+c.
+---- Results ----
+accuracy: 0.83081007
+accuracy_baseline: 0.7543161
+auc: 0.8833917
+auc_precision_recall: 0.7033117
+average_loss: 0.36011028
+global_step: 1000
+label/mean: 0.24568394
+loss: 35.915634
+precision: 0.66628176
+prediction/mean: 0.26265323
+recall: 0.62378377
+d. The Black subgroup has a very low false positive rate (0.05) compared to the White subgroup (0.1) indicating that the
+model is skewed to be more likely to predict that a white person makes more than $50k than a black person.

@@ -5,3 +5,22 @@ supports(table,C)
 AxAy supports(x,y) => on(y,x)
 AxAy on(x,y) => above(x,y)
 AxAyAz above(x,y), above(y,z) => above(x,z)
+
+Prove: above(A,table)
+Resolution Proof:
+~above(A,table), on(A,B), on(B,C), supports(table,C)
+supports(table,C) => on(C,table)
+~above(A,table), on(A,B), on(B,C), on(C,table)
+on(A,B) => above(A,B)
+~above(A,table), above(A,B), on(B,C), on(C,table)
+on(B,C) => above(B,C)
+~above(A,table), above(A,B), above(B,C), on(C,table)
+on(C,table) => above(C,table)
+~above(A,table), above(A,B), above(B,C), above(C,table)
+above(A,B), above(B,C) => above(A,C)
+~above(A,table), above(A,C), above(C,table)
+above(A,C), above(C,table) => above(A,table)
+~above(A,table), above(A,table)
+0
+Therefore, above(A,table)
+

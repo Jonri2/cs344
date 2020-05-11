@@ -1,0 +1,7 @@
+Exercise 13.2.a.
+on(A,B)
+on(B,C)
+supports(table,C)
+AxAy supports(x,y) => on(y,x)
+AxAy on(x,y) => above(x,y)
+AxAyAz above(x,y), above(y,z) => above(x,z)

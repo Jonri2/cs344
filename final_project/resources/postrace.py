@@ -35,8 +35,8 @@ def clean_reviews(df):
     return pd.DataFrame(cleaned_reviews, columns=['review'])
 
 
-train_df = pd.read_csv('resources/train.csv', names=['rating', 'title', 'review'])
-test_df = pd.read_csv('resources/test.csv', names=['rating', 'title', 'review'])
+train_df = pd.read_csv('train.csv', names=['rating', 'title', 'review'])
+test_df = pd.read_csv('test.csv', names=['rating', 'title', 'review'])
 train_X = clean_reviews(train_df['review'])['review']
 train_Y = train_df['rating']
 test_X = clean_reviews(test_df['review'])['review']

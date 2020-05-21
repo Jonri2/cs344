@@ -1,5 +1,5 @@
 # Transfer Learning with Word2Vec and LSTM
-##### By Jonathan Ellis for CS 344 at Calvin University
+#### By Jonathan Ellis for CS 344 at Calvin University
 
 ## Vision
 This goal of this project is to design a machine learning model that will take a runner's text analysis of their race and

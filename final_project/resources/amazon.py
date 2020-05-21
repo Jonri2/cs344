@@ -35,8 +35,8 @@ def create_embedding_matrix(tokenizer, df, load=True):
     if load:
         if DEBUG:
             print("Loading Word2Vecs...")
-        model_cbow = KeyedVectors.load('model_cbow.word2vec')
-        model_sg = KeyedVectors.load('model_sg.word2vec')
+        model_cbow = KeyedVectors.load('model_cbow_30000.word2vec')
+        model_sg = KeyedVectors.load('model_sg_30000.word2vec')
     else:
         processed_reviews = reviews_to_word_list(df)
         cores = multiprocessing.cpu_count()
@@ -62,8 +62,8 @@ def create_embedding_matrix(tokenizer, df, load=True):
 
         if DEBUG:
             print("Saving Word2Vecs...")
-        model_cbow.save('model_cbow.word2vec')
-        model_sg.save('model_sg.word2vec')
+        model_cbow.save('model_cbow_30000.word2vec')
+        model_sg.save('model_sg_30000.word2vec')
 
     if DEBUG:
         print("Filling Embedding Indices...")
@@ -144,7 +144,7 @@ model.compile(optimizer=TFOptimizer(tf.optimizers.Adam()),
 
 history = model.fit(train_X,
                     train_Y,
-                    epochs=2,
+                    epochs=0,
                     batch_size=32,
                     validation_split=0.1)
 

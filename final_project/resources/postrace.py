@@ -17,7 +17,7 @@ from sklearn.model_selection import StratifiedKFold
 
 NUM_WORDS = 30000
 MAX_LENGTH = 250
-
+MONGO_URL = ''
 
 def preprocess_reviews(df, tokenizer):
     sequences = tokenizer.texts_to_sequences(df)
@@ -35,8 +35,8 @@ def clean_reviews(df):
     return pd.DataFrame(cleaned_reviews, columns=['review'])
 
 
-train_df = pd.read_csv('train.csv', names=['rating', 'title', 'review'])
-test_df = pd.read_csv('test.csv', names=['rating', 'title', 'review'])
+train_df = pd.read_csv('resources/train.csv', names=['rating', 'title', 'review'])
+test_df = pd.read_csv('resources/test.csv', names=['rating', 'title', 'review'])
 train_X = clean_reviews(train_df['review'])['review']
 train_Y = train_df['rating']
 test_X = clean_reviews(test_df['review'])['review']
@@ -46,7 +46,7 @@ all_X = pd.concat([train_X, test_X])
 tokenizer = Tokenizer(num_words=NUM_WORDS)
 tokenizer.fit_on_texts(all_X)
 
-client = MongoClient('<<MONGO_URL>>')
+client = MongoClient(MONGO_URL)
 db = client.calvinpostrace
 
 postrace_df = pd.concat([pd.DataFrame(db.archives.find()), pd.DataFrame(db.races.find())], ignore_index=True)
@@ -118,7 +118,7 @@ for train, test in kfold.split(X, Y1, Y2):
 
     history = postrace_model.fit(X[train],
                                  [train_Y1, train_Y2],
-                                 epochs=15,
+                                 epochs=150,
                                  batch_size=32,
                                  validation_data=(X[test], [test_Y1, test_Y2]))
     score = postrace_model.evaluate(X[test], [test_Y1, test_Y2], verbose=0)

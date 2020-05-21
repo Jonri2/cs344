@@ -1,4 +1,4 @@
-# Transfer Learning with Word2Vec and LSTM
+# Transfer Learning for text reviews with Word2Vec and LSTM
 #### By Jonathan Ellis for CS 344 at Calvin University
 
 ## Vision

@@ -5,7 +5,7 @@
 This goal of this project is to design a machine learning model that will take a runner's text analysis of their race and
 quantify their attitude and effort. This will allow coaches and team leaders to get a better idea of the mentality of
 each runner and the team as a whole, helping them develop a better plan to help the team improve after a race. The
-inspiration for this project came from my coaches on the Calvin University Cross Country team who emphasize the importance of focusing on attitude and effort in
+inspiration for this project came from my coaches on the Calvin University Cross Country team. They emphasize the importance of focusing on attitude and effort in
 competition since these two factors are some of the only controllable elements in running. Because of this emphasis, our team developed
 a [post-race analysis website](calvinpostrace.herokuapp.com) so every runner could write about how their race went and rate themselves for attitude and
 effort on a scale from 1-10. The data from this website are used to train the model. However, since there are so few samples

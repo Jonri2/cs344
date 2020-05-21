@@ -16,9 +16,9 @@ import re
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-NUM_WORDS = 100000
-MAX_LENGTH = 440
-VECTOR_DIM = 200
+NUM_WORDS = 30000
+MAX_LENGTH = 250
+VECTOR_DIM = 100
 DEBUG = True
 
 
@@ -106,7 +106,7 @@ if DEBUG:
 train_df = pd.read_csv('full_train.csv', names=['rating', 'title', 'review'])
 if DEBUG:
     print("Loading testing examples...")
-test_df = pd.read_csv('test.csv')
+test_df = pd.read_csv('test.csv', names=['rating', 'title', 'review'])
 
 if DEBUG:
     print("Cleaning training examples...")
@@ -132,15 +132,9 @@ embedding_matrix = create_embedding_matrix(tokenizer, all_X, load=True)
 train_Y = np.delete(to_categorical(train_Y), 0, axis=1)
 test_Y = np.delete(to_categorical(test_Y), 0, axis=1)
 
-val_X = train_X[900000:]
-val_Y = train_Y[900000:]
-train_X = train_X[:900000]
-train_Y = train_Y[:900000]
-
 model = models.Sequential()
-model.add(layers.embeddings.Embedding(NUM_WORDS, VECTOR_DIM, input_length=MAX_LENGTH, weights=[embedding_matrix], trainable=False))
-model.add(layers.Bidirectional(layers.LSTM(32)))
-model.add(layers.Dropout(0.2))
+model.add(layers.embeddings.Embedding(NUM_WORDS, VECTOR_DIM, input_length=MAX_LENGTH, weights=[embedding_matrix], trainable=True))
+model.add(layers.LSTM(32))
 model.add(layers.Dense(5, activation='softmax'))
 model.summary()
 
@@ -150,37 +144,19 @@ model.compile(optimizer=TFOptimizer(tf.optimizers.Adam()),
 
 history = model.fit(train_X,
                     train_Y,
-                    epochs=15,
+                    epochs=2,
                     batch_size=32,
-                    validation_data=(val_X, val_Y))
+                    validation_split=0.1)
 
 model.save('amazon.h5')
 
-acc = history.history['accuracy']
-val_acc = history.history['val_accuracy']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
 
-epochs = range(1, len(acc) + 1)
-
-# "bo" is for "blue dot"
-plt.plot(epochs, loss, 'bo', label='Training loss')
-# b is for "solid blue line"
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-
-plt.show()
-
-pred_Y = model.predict_classes(val_X)
-val_Y = [np.argmax(x) for x in val_Y]
+pred_Y = model.predict_classes(test_X)
+val_Y = [np.argmax(x) for x in test_Y]
 confusion_matrix = tf.math.confusion_matrix(labels=val_Y, predictions=pred_Y).numpy()
 confusion_matrix = np.around(confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis], decimals=2)
 confusion_matrix = pd.DataFrame(confusion_matrix, index=[1, 2, 3, 4, 5], columns=[1, 2, 3, 4, 5])
 
-plt.clf()
 figure = plt.figure(figsize=(8, 8))
 sns.heatmap(confusion_matrix, annot=True, cmap=plt.cm.Blues)
 plt.tight_layout()

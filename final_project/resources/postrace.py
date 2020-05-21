@@ -8,16 +8,15 @@ from keras.preprocessing.text import Tokenizer
 from keras.utils import to_categorical
 from keras.models import load_model
 from keras.optimizers import TFOptimizer
+from keras import models
+from keras import layers
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import StratifiedKFold
 
-NUM_WORDS = 100000
-MAX_LENGTH = 440
-VECTOR_DIM = 200
-LEARNING_RATE = 0.00005
-DEBUG = True
+NUM_WORDS = 30000
+MAX_LENGTH = 250
 
 
 def preprocess_reviews(df, tokenizer):
@@ -35,8 +34,9 @@ def clean_reviews(df):
         cleaned_reviews.append((" ".join(words)).strip())
     return pd.DataFrame(cleaned_reviews, columns=['review'])
 
-train_df = pd.read_csv('full_train.csv', names=['rating', 'title', 'review'])
-test_df = pd.read_csv('test.csv')
+
+train_df = pd.read_csv('train.csv', names=['rating', 'title', 'review'])
+test_df = pd.read_csv('test.csv', names=['rating', 'title', 'review'])
 train_X = clean_reviews(train_df['review'])['review']
 train_Y = train_df['rating']
 test_X = clean_reviews(test_df['review'])['review']
@@ -46,29 +46,35 @@ all_X = pd.concat([train_X, test_X])
 tokenizer = Tokenizer(num_words=NUM_WORDS)
 tokenizer.fit_on_texts(all_X)
 
-client = MongoClient('mongodb://admin:track1@ds141815.mlab.com:41815/calvinpostrace')
+client = MongoClient('<<MONGO_URL>>')
 db = client.calvinpostrace
 
 postrace_df = pd.concat([pd.DataFrame(db.archives.find()), pd.DataFrame(db.races.find())], ignore_index=True)
 
+
+def scale_feature(feature):
+    if feature < 5:
+        return 1
+    elif 5 <= feature <= 6:
+        return 2
+    elif feature == 7:
+        return 3
+    elif feature == 8:
+        return 4
+    elif feature > 8:
+        return 5
+    else:
+        raise ValueError
+
 analysis_list = []
-rating_list = []
+attitude_list = []
+effort_list = []
 for index, row in postrace_df.iterrows():
     try:
-        rating = round((float(row.attitude) + float(row.effort))/2)
-        if rating < 6:
-            rating = 1
-        elif rating == 6 or rating == 7:
-            rating = 2
-        elif rating == 8:
-            rating = 3
-        elif rating == 9:
-            rating = 4
-        elif rating > 9:
-            rating = 5
-        else:
-            continue
-        rating_list.append(rating)
+        attitude = scale_feature(round(float(row.attitude)))
+        effort = scale_feature(round(float(row.effort)))
+        attitude_list.append(attitude)
+        effort_list.append(effort)
     except ValueError:
         continue
 
@@ -77,61 +83,82 @@ for index, row in postrace_df.iterrows():
     analysis_list.append(' '.join(analysis_parts))
 
 X = clean_reviews(analysis_list)['review']
-Y = np.array(rating_list)
+Y1 = np.array(attitude_list)
+Y2 = np.array(effort_list)
 
 X = preprocess_reviews(X, tokenizer)
 
 kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=5)
-scores = []
-confusion_matrices = []
-for train, test in kfold.split(X, Y):
-    train_Y = np.delete(to_categorical(Y[train]), 0, axis=1)
-    test_Y = np.delete(to_categorical(Y[test]), 0, axis=1)
-    model = load_model('amazon.h5')
+attitude_scores = []
+effort_scores = []
+attitude_confusion_matrices = []
+effort_confusion_matrices = []
+count = 1
+for train, test in kfold.split(X, Y1, Y2):
+    train_Y1 = np.delete(to_categorical(Y1[train]), 0, axis=1)
+    test_Y1 = np.delete(to_categorical(Y1[test]), 0, axis=1)
+    train_Y2 = np.delete(to_categorical(Y2[train]), 0, axis=1)
+    test_Y2 = np.delete(to_categorical(Y2[test]), 0, axis=1)
 
-    model.compile(optimizer=TFOptimizer(tf.optimizers.Adam(LEARNING_RATE)),
-                  loss='categorical_crossentropy',
-                  metrics=['accuracy'])
+    amzn_model = load_model('resources/amazon.h5')
+    amzn_model.layers[0].trainable = False
+    input1 = layers.Input(shape=(MAX_LENGTH,))
+    x = amzn_model.layers[0](input1)
+    x = amzn_model.layers[1](x)
+    out1 = amzn_model.layers[2](x)
+    out2 = amzn_model.layers[2](x)
+    postrace_model = models.Model(inputs=input1, outputs=[out1, out2])
 
-    history = model.fit(X[train],
-                        train_Y,
-                        epochs=30,
-                        batch_size=8)
-    score = model.evaluate(X[test], test_Y, verbose=0)
-    print("%s: %.2f%%" % (model.metrics_names[1], score[1] * 100))
-    scores.append(score[1] * 100)
+    if count == 1:
+        postrace_model.summary()
 
-    pred_Y = model.predict_classes(X[test])
-    true_Y = [np.argmax(x) for x in test_Y]
-    confusion_matrices.append(tf.math.confusion_matrix(labels=true_Y, predictions=pred_Y).numpy())
+    postrace_model.compile(optimizer=TFOptimizer(tf.optimizers.Adam()),
+                           loss='categorical_crossentropy',
+                           metrics=['accuracy'])
 
-print("%.2f%% (+/- %.2f%%)" % (np.mean(scores), np.std(scores)))
+    history = postrace_model.fit(X[train],
+                                 [train_Y1, train_Y2],
+                                 epochs=15,
+                                 batch_size=32,
+                                 validation_data=(X[test], [test_Y1, test_Y2]))
+    score = postrace_model.evaluate(X[test], [test_Y1, test_Y2], verbose=0)
+    print("Run %d attitude accuracy: %.2f%%" % (count, score[3] * 100))
+    attitude_scores.append(score[3] * 100)
+    print("Run %d effort accuracy: %.2f%%" % (count, score[4] * 100))
+    effort_scores.append(score[4] * 100)
 
-# acc = history.history['accuracy']
-# val_acc = history.history['val_accuracy']
-# loss = history.history['loss']
-# val_loss = history.history['val_loss']
-#
-# epochs = range(1, len(acc) + 1)
-#
-# # "bo" is for "blue dot"
-# plt.plot(epochs, loss, 'bo', label='Training loss')
-# # b is for "solid blue line"
-# plt.plot(epochs, val_loss, 'b', label='Validation loss')
-# plt.title('Training and validation loss')
-# plt.xlabel('Epochs')
-# plt.ylabel('Loss')
-# plt.legend()
-#
-# plt.show()
+    pred_Y = np.array(postrace_model.predict(X[test]))
+    pred_Y1 = [np.argmax(x) for x in pred_Y[0]]
+    pred_Y2 = [np.argmax(x) for x in pred_Y[1]]
+    true_Y1 = [np.argmax(x) for x in test_Y1]
+    true_Y2 = [np.argmax(x) for x in test_Y2]
+    attitude_confusion_matrices.append(tf.math.confusion_matrix(labels=true_Y1, predictions=pred_Y1))
+    effort_confusion_matrices.append(tf.math.confusion_matrix(labels=true_Y2, predictions=pred_Y2))
 
-full_confusion_matrix = np.sum(np.array(confusion_matrices), axis=0)
-confusion_matrix = np.around(full_confusion_matrix.astype('float') / full_confusion_matrix.sum(axis=1)[:, np.newaxis], decimals=2)
-full_confusion_matrix = pd.DataFrame(full_confusion_matrix, index=[1, 2, 3, 4, 5], columns=[1, 2, 3, 4, 5])
+    count += 1
+
+print("attitude accuracy: %.2f%% (+/- %.2f%%)" % (np.mean(attitude_scores), np.std(attitude_scores)))
+print("effort accuracy: %.2f%% (+/- %.2f%%)" % (np.mean(effort_scores), np.std(effort_scores)))
+
+attitude_confusion_matrix = np.sum(np.array(attitude_confusion_matrices), axis=0)
+attitude_confusion_matrix = np.around(attitude_confusion_matrix.astype('float') / attitude_confusion_matrix.sum(axis=1)[:, np.newaxis], decimals=2)
+attitude_confusion_matrix = pd.DataFrame(attitude_confusion_matrix, index=[1, 2, 3, 4, 5], columns=[1, 2, 3, 4, 5])
 
 plt.clf()
 figure = plt.figure(figsize=(8, 8))
-sns.heatmap(full_confusion_matrix, annot=True, cmap=plt.cm.Blues)
+sns.heatmap(attitude_confusion_matrix, annot=True, cmap=plt.cm.Blues)
+plt.tight_layout()
+plt.ylabel('True label')
+plt.xlabel('Predicted label')
+plt.show()
+
+effort_confusion_matrix = np.sum(np.array(effort_confusion_matrices), axis=0)
+effort_confusion_matrix = np.around(effort_confusion_matrix.astype('float') / effort_confusion_matrix.sum(axis=1)[:, np.newaxis], decimals=2)
+effort_confusion_matrix = pd.DataFrame(effort_confusion_matrix, index=[1, 2, 3, 4, 5], columns=[1, 2, 3, 4, 5])
+
+plt.clf()
+figure = plt.figure(figsize=(8, 8))
+sns.heatmap(effort_confusion_matrix, annot=True, cmap=plt.cm.Blues)
 plt.tight_layout()
 plt.ylabel('True label')
 plt.xlabel('Predicted label')

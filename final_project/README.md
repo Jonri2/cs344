@@ -1,6 +1,7 @@
 # Transfer Learning with Word2Vec and LSTM
-### By Jonathan Ellis for CS 344 at Calvin University
+##### By Jonathan Ellis for CS 344 at Calvin University
 
+## Vision
 This goal of this project is to design a machine learning model that will take a runner's text analysis of their race and
 quantify their attitude and effort. This will allow coaches and team leaders to get a better idea of the mentality of
 each runner and the team as a whole, helping them develop a better plan to help the team improve after a race. The
@@ -11,6 +12,7 @@ effort on a scale from 1-10. The data from this website are used to train the mo
 from the website, a model is first trained on an Amazon Reviews dataset before being applied to the post-race data so that the
 post-race model has some insights before training even begins.
 
+## Running the Project
 The two main code modules are amazon.py and postrace.py located in resources/. The amazon.py module trains the Amazon
 reviews model and the postrace.py trains the post-race model. There are a few things you need to run the model. The first
 is the MONGO_URL located in postrace.py. I have redacted the url to keep the database secure. If you need the url, email
